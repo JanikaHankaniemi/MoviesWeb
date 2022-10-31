@@ -34,8 +34,7 @@ function FindMoviesContainer() {
     }
     return rows;
   };
-  console.log("length", movies?.length)
-  console.log("isFetchingMovies", isFetchingMovies)
+
   return (
     <Grid container>
       <Grid item xs={12} sx={{ marginTop: '30px', marginBottom: '30px' }}>
