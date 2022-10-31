@@ -29,7 +29,7 @@ function FindMoviesContainer() {
     let rows = [];
     if (rating) {
       for (var i = 0; i < rating; i++) {
-        rows.push(<StarBorderIcon sx={{ fontSize: 16 }}/>)
+        rows.push(<StarBorderIcon key={`stars${i}`}  sx={{ fontSize: 16 }}/>)
       }
     }
     return rows;
@@ -45,8 +45,8 @@ function FindMoviesContainer() {
       </Grid>
       {!isFetchingMovies && movies && (
       <Grid item xs={12}>
-        {movies?.map(movie => (
-          <Card sx={{ marginBottom: '10px', padding: '20px' }}>
+        {movies?.map((movie, index) => (
+          <Card key={`card${index}`} sx={{ marginBottom: '10px', padding: '20px' }}>
             <Grid container sx={{ padding: '5px' }}>
               <Grid item xs={12}>
                 <Typography variant="button">{movie.name}</Typography>

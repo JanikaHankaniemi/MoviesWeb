@@ -19,19 +19,21 @@ export const getGenres = createAsyncThunk('movies/getGenres', async () => {
 
 export const findMovie = createAsyncThunk('movies/findMovie', async ({ id }) => {
   const response = await axios.get(
-    'api/Movies/${id}'
+    `api/Movies/${id}`
   );
   return response.data;
 });
 
-export const searchMovie = createAsyncThunk('movies/searchMovie', async ({ searchTerms }) => {
+export const searchMovies = createAsyncThunk('movies/searchMovies', async ({ searchTerms }) => {
+  console.log("searchTerms", searchTerms)
   const response = await axios.get(
     'api/Movies/Search',
     {
       params: {
-        searchTerms
+        freeText:"odyssey"
       },
     });
+  console.log("result", response.data)
   return response.data;
 });
 
@@ -103,14 +105,14 @@ export const moviesSlice = createSlice({
     [findMovie.rejected]: (state) => {
       state.findingMovie = false;
     },
-    [searchMovie.pending]: (state) => {
+    [searchMovies.pending]: (state) => {
       state.searchingMovies = true;
     },
-    [searchMovie.fulfilled]: (state, { payload }) => {
-      state.searchResult = payload;
+    [searchMovies.fulfilled]: (state, { payload }) => {
+      state.movies = payload;
       state.searchingMovies = false;
     },
-    [searchMovie.rejected]: (state) => {
+    [searchMovies.rejected]: (state) => {
       state.searchingMovies = false;
     },
     [addMovie.pending]: (state) => {

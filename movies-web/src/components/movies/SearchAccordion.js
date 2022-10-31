@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, useFormState } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -12,11 +12,12 @@ import {
   InputLabel,
   MenuItem,
   Grid,
-  TextField
+  TextField,
+  Button
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import { searchMovie } from '../../redux/MoviesSlice';
+import { searchMovies } from '../../redux/MoviesSlice';
 import { getGenres } from '../../redux/MoviesSlice';
 
 function SearchAccordion() {
@@ -36,36 +37,52 @@ function SearchAccordion() {
         .string()
         .nullable(),
       year: yup
-        .number()
+        .string()
         .nullable(),
       ageLimit: yup
-        .number()
+        .string()
         .nullable(),
       rating: yup
-        .number()
+        .string()
         .nullable()
     })
     .required();
 
-  const {
-    handleSubmit, control, setValue, watch, reset,
-  } = useForm({
+
+  const methods = useForm({
     mode: 'all',
     resolver: yupResolver(schema),
     defaultValues: {
       freeText: '',
-      person: '',
       genre: '',
       year: '',
       ageLimit: '',
       rating: ''
     },
   });
+  const {
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors },
+    trigger,
+  } = methods;
 
-  const modSearchObject = (formData) => {
-    dispatch(searchMovie({ searchTerms: formData }));
+  const onSubmit = async (formData) => {
+    const formData2 = {
+      ...formData,
+      freeText:"The"
+    }
+    console.log("yritystä on", formData2)
+    try {
+      await dispatch(searchMovies({ formData: formData2 }))
+        .then((result) => {
+          console.log("done", result)
+        });
+    } catch (error) {
+      
+    }
   };
-  const [selection, setSelection] = useState();
   const genres = useSelector(
     (state) => state.movies.genres);
   const isFetchingGenres = useSelector(
@@ -75,7 +92,6 @@ function SearchAccordion() {
     if (!genres || genres?.length === 0) {
       dispatch(getGenres());
     }
-    console.log("Genres", genres)
   }, [dispatch, genres]);
 
   const GetStarOptions = () => {
@@ -84,13 +100,14 @@ function SearchAccordion() {
     const fiveRows = [...Array(5).keys()].reverse();
     fiveRows.forEach(index => {
       for (var i = 0; i < index+1; i++) {
-        innerRows.push(<StarBorderIcon sx={{ fontSize: 16 }}/>)
+        innerRows.push(<StarBorderIcon key={`starsicon${index},${i}`} sx={{ fontSize: 16 }}/>)
       }
-      rows.push(<MenuItem key={index + 1} value={index + 1}>{innerRows}</MenuItem>)
+      rows.push(<MenuItem key={`stars${index + 1}`} value={index + 1}>{innerRows}</MenuItem>)
       innerRows=[];
     })
     return rows;
   };
+  console.log("errors", errors)
   return (
     <div>
       <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} disableGutters={true}
@@ -106,7 +123,11 @@ function SearchAccordion() {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <form id="serchMovies" onSubmit={handleSubmit(modSearchObject)}>
+          <FormProvider {...methods}>
+            <form
+              id="serchMovies"
+              onSubmit={handleSubmit(onSubmit)}
+            >
             <Grid
               container
               rowSpacing={2}
@@ -114,48 +135,78 @@ function SearchAccordion() {
               marginTop={0.5}
             >
               <Grid item xs={12} md={12} lg={12}>
-                <TextField id="outlined-basic" label="Free text" variant="outlined" fullWidth />
-              </Grid>
-              <Grid item xs={12} md={4} lg={3}>
-                <TextField id="outlined-basic" label="Year" variant="outlined" fullWidth />
+                <TextField
+                  id="freeText"
+                  name="freeText"
+                  control={control}
+                  label="Free text"
+                  variant="outlined"
+                  fullWidth />
               </Grid>
               <Grid item xs={12} md={4} lg={3}>
                 <TextField
-                  value={selection}
-                  onChange={(e) => setSelection(e.target.value)}
+                  id="year"
+                  name="year"
+                  control={control}
+                  label="Year"
+                  variant="outlined"
+                  fullWidth />
+              </Grid>
+              <Grid item xs={12} md={4} lg={3}>
+                <TextField
                   select
+                  id="rating"
+                  name="rating"
+                  control={control}
                   label="Rating"
                   fullWidth
+                  defaultValue=""
                 >
+                  <MenuItem key="nullselect" value="">&nbsp;</MenuItem>
                   {GetStarOptions()}
                 </TextField>
               </Grid>
               <Grid item xs={12} md={4} lg={3}>
                 <TextField
-                  value={selection}
-                  onChange={(e) => setSelection(e.target.value)}
                   select
+                  id="ageLimit"
+                  name="ageLimit"
+                  control={control}
                   label="Age Limit"
                   fullWidth
+                  defaultValue=""
                 >
+                  <MenuItem key="nullselect" value="">&nbsp;</MenuItem>
                   {[...Array(19).keys()].map(age => <MenuItem key={`age${age}`} value={age}>{age}</MenuItem>)}
                 </TextField>
               </Grid>
               <Grid item xs={12} md={4} lg={3}>
                 {!isFetchingGenres && genres && (
-                  <TextField
-                    value={selection}
-                    onChange={(e) => setSelection(e.target.value)}
-                    select
-                    label="Genre"
-                    fullWidth
-                  >
+                  <Grid item xs={12} md={4} lg={3}>
+                    <TextField
+                      select
+                      id="genre"
+                      name="genre"
+                      control={control}
+                      label="Genre"
+                      fullWidth
+                      defaultValue=""
+                    >
+                    <MenuItem key="nullselect" value="">&nbsp;</MenuItem>
                     {genres.map(genre => <MenuItem key={`genre${genre.name}`} value={genre.name}>{genre.name}</MenuItem>)}
-                  </TextField>
+                    </TextField>
+                  </Grid>
                 )}
               </Grid>
+
+              <Button
+                onClick={handleSubmit(onSubmit)}
+              >
+                Search
+              </Button>
             </Grid>
           </form>
+      </FormProvider>
         </AccordionDetails>
       </Accordion>
     </div>
