@@ -18,7 +18,7 @@ const MobileDrawer = ({links}) => {
           {links.map((link, index) =>(
             <ListItemButton sx={{ paddingLeft: 5, paddingRight: 5 }} key={index} onClick={() => setOpen(false)}>
             <ListItemIcon>
-                <ListItemText>{ link }</ListItemText>
+                <ListItemText>{ link.title }</ListItemText>
             </ListItemIcon>
             </ListItemButton>
           ))}

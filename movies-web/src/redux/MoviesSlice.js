@@ -5,15 +5,12 @@ export const getMovies = createAsyncThunk('movies/getMovies', async () => {
   const response = await axios.get(
     'api/Movies'
   );
-  console.log("step 1", response);
   return response.data;
 });
 export const getGenres = createAsyncThunk('movies/getGenres', async () => {
-  console.log("step 1");
   const response = await axios.get(
     'api/Movies/Genres'
   );
-  console.log("step 1", response);
   return response.data;
 });
 
@@ -24,16 +21,14 @@ export const findMovie = createAsyncThunk('movies/findMovie', async ({ id }) => 
   return response.data;
 });
 
-export const searchMovies = createAsyncThunk('movies/searchMovies', async ({ searchTerms }) => {
-  console.log("searchTerms", searchTerms)
+export const searchMovies = createAsyncThunk('movies/searchMovies', async ({ formData }) => {
   const response = await axios.get(
     'api/Movies/Search',
     {
       params: {
-        freeText:"odyssey"
+        ...formData
       },
     });
-  console.log("result", response.data)
   return response.data;
 });
 

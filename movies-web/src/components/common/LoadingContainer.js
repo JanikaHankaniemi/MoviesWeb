@@ -1,12 +1,19 @@
 import React from 'react';
-import Container from '@mui/material/Container';
-import CircularProgress from '@mui/material/CircularProgress';
+import {
+  Typography,
+  Card,
+  Grid
+} from '@mui/material';
 
 function LoadingContainer() {
   return (
-    <div>
-      Loading...
-    </div>
+    <Card key={"cardempty"} sx={{ marginBottom: '10px', padding: '20px' }}>
+      <Grid container sx={{ padding: '5px' }}>
+        <Grid item xs={12}>
+          <Typography variant="button">Loading...</Typography>
+        </Grid>
+      </Grid>
+    </Card>
   );
 }
 

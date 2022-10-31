@@ -4,6 +4,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  history
 } from 'react-router-dom';
 import { styled } from '@mui/system';
 import NavigationBar from '../components/common/NavigationBar'

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -48,41 +48,25 @@ function SearchAccordion() {
     })
     .required();
 
-
-  const methods = useForm({
-    mode: 'all',
-    resolver: yupResolver(schema),
-    defaultValues: {
-      freeText: '',
-      genre: '',
-      year: '',
-      ageLimit: '',
-      rating: ''
-    },
-  });
-  const {
-    handleSubmit,
-    control,
-    watch,
-    formState: { errors },
-    trigger,
-  } = methods;
+  const { register, handleSubmit, reset } = useForm();
 
   const onSubmit = async (formData) => {
-    const formData2 = {
-      ...formData,
-      freeText:"The"
-    }
-    console.log("yritystä on", formData2)
     try {
-      await dispatch(searchMovies({ formData: formData2 }))
-        .then((result) => {
-          console.log("done", result)
-        });
+      await dispatch(searchMovies({ formData: formData }));
     } catch (error) {
       
     }
   };
+
+  const clearForm = async () => {
+    try {
+      reset();
+      await onSubmit();
+    } catch (error) {
+
+    }
+  }
+
   const genres = useSelector(
     (state) => state.movies.genres);
   const isFetchingGenres = useSelector(
@@ -107,15 +91,14 @@ function SearchAccordion() {
     })
     return rows;
   };
-  console.log("errors", errors)
+
   return (
     <div>
       <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} disableGutters={true}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
+          id="searcAccordion"
           sx={{ backgroundColor: "#5E747F" }}
         >
           <Typography variant="button" color="white">
@@ -123,11 +106,7 @@ function SearchAccordion() {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <FormProvider {...methods}>
-            <form
-              id="serchMovies"
-              onSubmit={handleSubmit(onSubmit)}
-            >
+          <form onSubmit={handleSubmit((data) => onSubmit(data))}>
             <Grid
               container
               rowSpacing={2}
@@ -138,7 +117,7 @@ function SearchAccordion() {
                 <TextField
                   id="freeText"
                   name="freeText"
-                  control={control}
+                  {...register("freeText")}
                   label="Free text"
                   variant="outlined"
                   fullWidth />
@@ -147,7 +126,7 @@ function SearchAccordion() {
                 <TextField
                   id="year"
                   name="year"
-                  control={control}
+                  {...register("year")}
                   label="Year"
                   variant="outlined"
                   fullWidth />
@@ -157,7 +136,7 @@ function SearchAccordion() {
                   select
                   id="rating"
                   name="rating"
-                  control={control}
+                  {...register("rating")}
                   label="Rating"
                   fullWidth
                   defaultValue=""
@@ -171,7 +150,7 @@ function SearchAccordion() {
                   select
                   id="ageLimit"
                   name="ageLimit"
-                  control={control}
+                  {...register("ageLimit")}
                   label="Age Limit"
                   fullWidth
                   defaultValue=""
@@ -182,12 +161,11 @@ function SearchAccordion() {
               </Grid>
               <Grid item xs={12} md={4} lg={3}>
                 {!isFetchingGenres && genres && (
-                  <Grid item xs={12} md={4} lg={3}>
                     <TextField
                       select
                       id="genre"
                       name="genre"
-                      control={control}
+                      {...register("genre")}
                       label="Genre"
                       fullWidth
                       defaultValue=""
@@ -195,18 +173,14 @@ function SearchAccordion() {
                     <MenuItem key="nullselect" value="">&nbsp;</MenuItem>
                     {genres.map(genre => <MenuItem key={`genre${genre.name}`} value={genre.name}>{genre.name}</MenuItem>)}
                     </TextField>
-                  </Grid>
                 )}
               </Grid>
-
-              <Button
-                onClick={handleSubmit(onSubmit)}
-              >
-                Search
-              </Button>
+              <Grid item xs={12}>
+                <Button type="submit" variant="contained" sx={{marginRight: '20px', marginBottom:'15px', width:'100px'}}>Search</Button>
+                <Button onClick={clearForm} sx={{ width: '100px', marginBottom: '15px',}} variant="contained">Clear</Button>
+              </Grid>
             </Grid>
           </form>
-      </FormProvider>
         </AccordionDetails>
       </Accordion>
     </div>

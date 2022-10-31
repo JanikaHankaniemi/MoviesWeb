@@ -9,7 +9,6 @@ import { getMovies } from '../../redux/MoviesSlice';
 // import theme from '../../theme/theme';
 
 function FindMoviesContainer() {
-  console.log("taalla");
   return (
     <Container maxWidth="xl" id="contactForm">
       <Grid container>

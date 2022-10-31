@@ -1,28 +1,44 @@
 import React, { useState } from "react";
+import { useLocation, Link } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
   Grid,
   Tabs,
   Tab,
+  Link as LinkMaterial,
   Typography,
   useMediaQuery,
-  Link,
   Box
 } from "@mui/material";
 import { LocalMovies } from "@mui/icons-material";
 import MobileDrawer from "./MobileDrawer";
 const nameOfApp = "MoviesDB"
 const logoAndName = (
-  <Link href="/">
+  <LinkMaterial href="/">
     <Typography variant="subtitle1" color="white">
       <LocalMovies />{nameOfApp}
     </Typography>
-  </Link>
+  </LinkMaterial>
 );
+const LinkTab = (props) => {
+  return (
+    <Tab
+      component="a"
+      onClick={(event) => {
+        event.preventDefault();
+      }}
+      {...props}
+    />
+  );
+}
 
 const NavigationBar = ({ links }) => {
+  const location = useLocation().pathname;
   const [value, setValue] = useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   const isMobile = useMediaQuery('(max-width:770px)');
   return (
     <Box role="navigation">
@@ -42,9 +58,15 @@ const NavigationBar = ({ links }) => {
                     style: {
                       backgroundColor: "white"
                     }
-                  }} textColor="inherit" value={value} onChange={(e, val) => setValue(val)}>
-                    {links.map((link, index) => (
-                      <Tab key={index} label={link.title} component={Link} to={link.path}/>
+                  }}
+                    textColor="inherit"
+                    value={
+                      location !== "/"
+                        ? location
+                        : links[0].path
+                    }>
+                    {links.map((object, index) => (
+                      <Tab key={index} value={object.path} label={object.title} component={Link} to={object.path}/>
                     ))}
                   </Tabs>
                 </Grid>
