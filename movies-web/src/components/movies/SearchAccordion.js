@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import {
   Typography,
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Select,
-  InputLabel,
   MenuItem,
   Grid,
   TextField,
@@ -24,38 +21,12 @@ function SearchAccordion() {
   const dispatch = useDispatch();
   const [expanded, setExpanded] = useState(false);
 
-  const schema = yup
-    .object()
-    .shape({
-      freeText: yup
-        .string()
-        .nullable(),
-      person: yup
-        .string()
-        .nullable(),
-      genre: yup
-        .string()
-        .nullable(),
-      year: yup
-        .string()
-        .nullable(),
-      ageLimit: yup
-        .string()
-        .nullable(),
-      rating: yup
-        .string()
-        .nullable()
-    })
-    .required();
-
   const { register, handleSubmit, reset } = useForm();
 
   const onSubmit = async (formData) => {
     try {
       await dispatch(searchMovies({ formData: formData }));
-    } catch (error) {
-      
-    }
+    } catch (error) { }
   };
 
   const clearForm = async () => {
@@ -73,7 +44,7 @@ function SearchAccordion() {
     (state) => state.movies.isFetchingGenres);
 
   useEffect(() => {
-    if (!genres || genres?.length === 0) {
+    if (!genres) {
       dispatch(getGenres());
     }
   }, [dispatch, genres]);
@@ -83,7 +54,7 @@ function SearchAccordion() {
     let innerRows = [];
     const fiveRows = [...Array(5).keys()].reverse();
     fiveRows.forEach(index => {
-      for (var i = 0; i < index+1; i++) {
+      for (var i = 0; i < index + 1; i++) {
         innerRows.push(<StarBorderIcon key={`starsicon${index},${i}`} sx={{ fontSize: 16 }}/>)
       }
       rows.push(<MenuItem key={`stars${index + 1}`} value={index + 1}>{innerRows}</MenuItem>)
@@ -94,8 +65,7 @@ function SearchAccordion() {
 
   return (
     <div>
-      <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} disableGutters={true}
-      >
+      <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} disableGutters={true}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           id="searcAccordion"

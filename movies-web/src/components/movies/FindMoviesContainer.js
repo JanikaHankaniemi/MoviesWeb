@@ -1,8 +1,5 @@
-/* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable object-curly-newline */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import { useTranslation } from 'react-i18next';
 import {
   Typography,
   Card

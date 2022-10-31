@@ -3,15 +3,13 @@ import React, { Suspense, lazy } from 'react';
 import {
   BrowserRouter,
   Routes,
-  Route,
-  history
+  Route
 } from 'react-router-dom';
 import { styled } from '@mui/system';
 import NavigationBar from '../components/common/NavigationBar'
 import LoadingContainer from '../components/common/LoadingContainer';
 import ScrollToTop from '../app/ScrollToTop'
 const AsyncFindMovies = lazy(() => import('../components/movies/FindMoviesContainer'));
-const AsyncShowMovie = lazy(() => import('../components/movies/ShowMovieContainer'));
 const AsyncAddMovie = lazy(() => import('../components/movies/AddMovieContainer'));
 const navLinks = [{ title: "Search movies", path: "/movies" }, { title: "Add movie", path: "/addMovie" }];
 
@@ -43,7 +41,6 @@ const RouteList = () => {
           <Routes>
             <Route path="/" element={<AsyncFindMovies />} />
             <Route path="/movies" element={<AsyncFindMovies />} />
-            <Route path="/movies/:id?" element={<AsyncShowMovie />} />
             <Route path="/addMovie" element={<AsyncAddMovie />} />
           </Routes>
         </Suspense>
