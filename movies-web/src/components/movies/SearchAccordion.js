@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import * as yup from 'yup';
 import {
   Typography,
   Accordion,
@@ -13,9 +12,9 @@ import {
   Button
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { searchMovies } from '../../redux/MoviesSlice';
 import { getGenres } from '../../redux/MoviesSlice';
+import { GetStarOptions } from '../common/Utils'
 
 function SearchAccordion() {
   const dispatch = useDispatch();
@@ -41,7 +40,7 @@ function SearchAccordion() {
   const genres = useSelector(
     (state) => state.movies.genres);
   const isFetchingGenres = useSelector(
-    (state) => state.movies.isFetchingGenres);
+    (state) => state.movies.FetchingGenres);
 
   useEffect(() => {
     if (!genres) {
@@ -49,19 +48,19 @@ function SearchAccordion() {
     }
   }, [dispatch, genres]);
 
-  const GetStarOptions = () => {
-    let rows = [];
-    let innerRows = [];
-    const fiveRows = [...Array(5).keys()].reverse();
-    fiveRows.forEach(index => {
-      for (var i = 0; i < index + 1; i++) {
-        innerRows.push(<StarBorderIcon key={`starsicon${index},${i}`} sx={{ fontSize: 16 }}/>)
-      }
-      rows.push(<MenuItem key={`stars${index + 1}`} value={index + 1}>{innerRows}</MenuItem>)
-      innerRows=[];
-    })
-    return rows;
-  };
+  //const GetStarOptions = () => {
+  //  let rows = [];
+  //  let innerRows = [];
+  //  const fiveRows = [...Array(5).keys()].reverse();
+  //  fiveRows.forEach(index => {
+  //    for (var i = 0; i < index + 1; i++) {
+  //      innerRows.push(<StarBorderIcon key={`starsicon${index},${i}`} sx={{ fontSize: 16 }}/>)
+  //    }
+  //    rows.push(<MenuItem key={`stars${index + 1}`} value={index + 1}>{innerRows}</MenuItem>)
+  //    innerRows=[];
+  //  })
+  //  return rows;
+  //};
 
   return (
     <div>
