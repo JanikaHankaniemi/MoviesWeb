@@ -26,7 +26,7 @@ const NavigationBar = ({ links }) => {
   const isMobile = useMediaQuery('(max-width:770px)');
   return (
     <Box role="navigation">
-      <AppBar position="sticky">
+      <AppBar position="sticky" style={{ background: "#7B9E87" }}>
         <Toolbar>
           {isMobile ?
             <>
@@ -44,7 +44,7 @@ const NavigationBar = ({ links }) => {
                     }
                   }} textColor="inherit" value={value} onChange={(e, val) => setValue(val)}>
                     {links.map((link, index) => (
-                      <Tab key={index} label={link} />
+                      <Tab key={index} label={link.title} component={Link} to={link.path}/>
                     ))}
                   </Tabs>
                 </Grid>

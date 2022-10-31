@@ -12,7 +12,7 @@ import ScrollToTop from '../app/ScrollToTop'
 const AsyncFindMovies = lazy(() => import('../components/movies/FindMoviesContainer'));
 const AsyncShowMovie = lazy(() => import('../components/movies/ShowMovieContainer'));
 const AsyncAddMovie = lazy(() => import('../components/movies/AddMovieContainer'));
-const navLinks = ["All movies", "Search", "Add movie"];
+const navLinks = [{ title: "Search movies", path: "/movies" }, { title: "Add movie", path: "/addMovie" }];
 
 const FullHeightDiv = styled('div')({
   height: '100%',

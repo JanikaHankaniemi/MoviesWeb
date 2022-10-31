@@ -13,7 +13,7 @@ const MobileDrawer = ({links}) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Drawer open={open} onClose={() => setOpen(false)} PaperProps={{ sx: {innerWidth:50}}}>
+      <Drawer open={open} onClose={() => setOpen(false)} PaperProps={{ sx: { innerWidth: 50 } }} style={{ background: "#7B9E87" }}>
         <List>
           {links.map((link, index) =>(
             <ListItemButton sx={{ paddingLeft: 5, paddingRight: 5 }} key={index} onClick={() => setOpen(false)}>

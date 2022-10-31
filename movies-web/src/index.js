@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import RouteList from './app/Routes';
 import store from './app/Store';
 import { setupInterceptors } from './api/AxiosSetup';
-
+import './index.css';
 setupInterceptors(store);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
