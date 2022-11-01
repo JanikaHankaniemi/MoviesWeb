@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 import {
   Typography,
   Grid,
@@ -18,7 +19,10 @@ import { GetStarOptions } from '../common/Utils'
 
 function AddMovieContainer() {
   const dispatch = useDispatch();
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    mode: 'onSubmit',
+    reValidateMode: 'onChange'
+  });
   const [genreSelection, setGenre] = useState([]);
 
   const defaultValues = {
@@ -75,7 +79,7 @@ function AddMovieContainer() {
       dispatch(getGenres());
     }
   }, [dispatch, genres]);
-
+  console.log("errors", errors)
   return (
     <Grid container>
       <Grid item xs={12} sx={{ marginTop: '30px', marginBottom: '30px' }}>
@@ -101,7 +105,7 @@ function AddMovieContainer() {
                   <TextField
                     id="name"
                     name="name"
-                    {...register("name")}
+                    {...register("name", { required: true })}
                     label="Name"
                     variant="outlined"
                     fullWidth />
@@ -112,7 +116,7 @@ function AddMovieContainer() {
                     rows={3}
                     id="synopsis"
                     name="synopsis"
-                    {...register("synopsis")}
+                    {...register("synopsis", { required: true })}
                     label="Synopsis"
                     variant="outlined"
                     fullWidth />
@@ -121,7 +125,7 @@ function AddMovieContainer() {
                   <TextField
                     id="actors"
                     name="actors"
-                    {...register("actors")}
+                    {...register("actors", { required: true })}
                     label="Actors"
                     variant="outlined"
                     fullWidth />
@@ -130,27 +134,27 @@ function AddMovieContainer() {
                   <TextField
                     id="director"
                     name="director"
-                    {...register("director")}
+                    {...register("director", { required: true })}
                     label="Director"
                     variant="outlined"
                     fullWidth />
                 </Grid>
-                <Grid item xs={12} md={4} lg={3} sx={{ padding: '10px' }}>
+                <Grid item xs={12} md={6} lg={3} sx={{ padding: '10px' }}>
+                  <InputLabel htmlFor="year">Year</InputLabel>
                   <TextField
                     id="year"
                     name="year"
-                    {...register("year")}
-                    label="Year"
+                    {...register("year", { required: true, pattern: /^[0-9]+$/i })}
                     variant="outlined"
                     fullWidth />
                 </Grid>
-                <Grid item xs={12} md={4} lg={3} sx={{ padding: '10px' }}>
+                <Grid item xs={12} md={6} lg={3} sx={{ padding: '10px' }}>
+                  <InputLabel htmlFor="rating">Rating</InputLabel>
                   <TextField
                     select
                     id="rating"
                     name="rating"
-                    {...register("rating")}
-                    label="Rating"
+                    {...register("rating", { required: true })}
                     fullWidth
                     defaultValue=""
                   >
@@ -158,26 +162,25 @@ function AddMovieContainer() {
                     {GetStarOptions()}
                   </TextField>
                 </Grid>
-                <Grid item xs={12} md={4} lg={3} sx={{ padding: '10px' }}>
+                <Grid item xs={12} md={6} lg={3} sx={{ padding: '10px' }}>
+                  <InputLabel htmlFor="age">Age Limit</InputLabel>
                   <TextField
                     select
                     id="ageLimit"
                     name="ageLimit"
-                    {...register("ageLimit")}
-                    label="Age Limit"
+                    {...register("ageLimit", { required: true })}
                     fullWidth
                     defaultValue=""
                   >
                     {[...Array(19).keys()].map(age => <MenuItem key={`age${age}`} value={age}>{age}</MenuItem>)}
                   </TextField>
                 </Grid>
-                <Grid item xs={12} sx={{ padding: '10px' }}>
+                <Grid item xs={12} md={6} lg={3} sx={{ padding: '10px' }}>
                   {!isFetchingGenres && genres && (
                     <>
-                      <InputLabel id="genre-label">Genre</InputLabel>
+                      <InputLabel htmlFor="genre">Genre</InputLabel>
                       <Select
                         multiple
-                        labelId="genre-label"
                         id="genres"
                         name="genres"
                         fullWidth
@@ -189,6 +192,12 @@ function AddMovieContainer() {
                      </>
                   )}
                 </Grid>
+                {Object.keys(errors).length !== 0 && (
+                  <Grid item xs={12} sx={{ padding: '10px', paddingTop: '20px' }}>
+                    <Typography variant="body1">All fields are mandatory, please checks</Typography>
+                    {errors.year?.type === 'pattern' && <Typography variant="body1">Year must be in numeric format</Typography>}
+                 </Grid>
+                )}
                 <Grid item xs={12} sx={{ padding: '10px', paddingTop: '20px' }}>
                   <Button type="submit" variant="contained" sx={{ marginRight: '20px', marginBottom: '15px', width: '100px' }}>Save</Button>
                   <Button onClick={clearForm} sx={{ width: '100px', marginBottom: '15px', }} variant="contained">Clear</Button>
