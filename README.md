@@ -12,7 +12,7 @@ All variables are defined in .env-file. File should contain
 > REACT_APP_API='<path to your backend>'
 > ```
 
-## Installing development enviornment on localhost
+## Installing development envronment on localhost
 Go to <your git folder>\movies-web.
 Install:
 ``npm install``
