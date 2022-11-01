@@ -33,6 +33,7 @@ export const searchMovies = createAsyncThunk('movies/searchMovies', async ({ for
 });
 
 export const addMovie = createAsyncThunk('movies/addMovie', async ({ formData }) => {
+  console.log("formData", formData)
   const response = await axios.post(
     `api/Movies`,
     formData,

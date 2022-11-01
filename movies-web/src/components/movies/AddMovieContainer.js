@@ -8,7 +8,8 @@ import {
   TextField,
   MenuItem,
   Select,
-  InputLabel
+  InputLabel,
+  Button
 } from '@mui/material';
 import { addMovie } from '../../redux/MoviesSlice';
 import { getGenres } from '../../redux/MoviesSlice';
@@ -25,8 +26,13 @@ function AddMovieContainer() {
     (state) => state.movies.FetchingGenres);
 
   const onSubmit = async (formData) => {
+    const modFormData = {
+      ...formData,
+      genres: genreSelection
+    }
+    console.log("form", modFormData)
     try {
-      await dispatch(addMovie({ formData: formData }));
+      await dispatch(addMovie({ formData: modFormData }));
     } catch (error) { }
   };
 
@@ -36,13 +42,9 @@ function AddMovieContainer() {
     setGenre(value);
   };
 
-  const clearForm = async () => {
-    try {
-      reset();
-      await onSubmit();
-    } catch (error) {
-
-    }
+  const clearForm = () => {
+    reset();
+    setGenre([]);
   }
   console.log("genreSelection", genreSelection)
   useEffect(() => {
@@ -54,12 +56,11 @@ function AddMovieContainer() {
   return (
     <Grid container>
       <Grid item xs={12} sx={{ marginTop: '30px', marginBottom: '30px' }}>
-        <Typography variant="h4" sx={{ marginLeft: '20px' }}>Hullo, Add A Movie</Typography>
+        <Typography variant="h4" sx={{ marginLeft: '20px' }}>Hullo, Add a Movie</Typography>
       </Grid>
       <Grid item xs={12} sx={{ marginBottom: '10px' }}>
         <Card key={"cardempty"} sx={{ marginBottom: '10px', padding: '20px' }}>
           <form onSubmit={handleSubmit((data) => onSubmit(data))}>
-
             <Grid container >
               <Grid item xs={12} sx={{ padding: '10px' }}>
                 <TextField
@@ -136,23 +137,28 @@ function AddMovieContainer() {
                   {[...Array(19).keys()].map(age => <MenuItem key={`age${age}`} value={age}>{age}</MenuItem>)}
                 </TextField>
               </Grid>
-              <Grid item xs={12} md={4} lg={3} sx={{ padding: '10px' }}>
+              <Grid item xs={12} sx={{ padding: '10px' }}>
                 {!isFetchingGenres && genres && (
                   <>
-                    <Select multiple
-                      id="genre"
-                      name="genre"
+                    <InputLabel id="genre-label">Genre</InputLabel>
+                    <Select
+                      multiple
+                      labelId="genre-label"
+                      id="genres"
+                      name="genres"
                       fullWidth
-                      label="test"
                       value={genreSelection}
                       onChange={handleChange}
-                      {...register("genre")}
                     >
                       <MenuItem key="nullselect" value="">&nbsp;</MenuItem>
                       {genres.map(genre => <MenuItem key={`genre${genre.name}`} value={genre.name}>{genre.name}</MenuItem>)}
                     </Select>
                   </>
                 )}
+              </Grid>
+              <Grid item xs={12} sx={{ padding: '10px', paddingTop: '20px' }}>
+                <Button type="submit" variant="contained" sx={{ marginRight: '20px', marginBottom: '15px', width: '100px' }}>Save</Button>
+                <Button onClick={clearForm} sx={{ width: '100px', marginBottom: '15px', }} variant="contained">Clear</Button>
               </Grid>
             </Grid>
           </form>
