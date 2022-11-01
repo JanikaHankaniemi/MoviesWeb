@@ -8,6 +8,7 @@ import {
 import { styled } from '@mui/system';
 import NavigationBar from '../components/common/NavigationBar'
 import LoadingContainer from '../components/common/LoadingContainer';
+import DialogError from '../components/common/DialogError';
 import ScrollToTop from '../app/ScrollToTop'
 const AsyncFindMovies = lazy(() => import('../components/movies/FindMoviesContainer'));
 const AsyncAddMovie = lazy(() => import('../components/movies/AddMovieContainer'));
@@ -33,7 +34,7 @@ const RouteList = () => {
   return (
     <BrowserRouter>
       <FullHeightDiv role="main">
-        {/*        <DialogError />*/}
+        <DialogError />
         <NavigationBar links={navLinks} />
         <ScrollDiv>
         <ScrollToTop />

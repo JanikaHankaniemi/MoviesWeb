@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogActions,
@@ -12,7 +11,6 @@ import {
 
 function DialogError() {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
   const errorMessage = useSelector((state) => state.errors.errorMessage);
   const errorCode = useSelector((state) => state.errors.errorCode);
 
@@ -20,33 +18,33 @@ function DialogError() {
     <Dialog
       open={!!errorMessage}
       onClose={() => dispatch({ type: 'error/resetErrors' })}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
       PaperProps={{ square: true }}
     >
-      <Card
-        ariaLabel="customer-service-info"
-        title={`${errorCode ? `${errorCode}: ` : ''} ${t(errorMessage) || ''}`}
+      <Card title={`${errorCode}: ${errorMessage}`} sx={{ padding: '20px' }}
       >
         {errorCode === 500 && (
-        <DialogContent sx={{ padding: 0 }} id="alert-dialog-description">
+        <DialogContent sx={{ padding: 0 }} id="alert-dialog-description-500">
+          <Typography variant="h5">{`${errorCode}: ${errorMessage}`}</Typography>
           <Typography variant="subtitle1">
-            testing
+           Something went wrong with the request and the server wasn't able to fullfil it.
           </Typography>
         </DialogContent>
         )}
+        {errorCode === 400 && (
+          <DialogContent sx={{ padding: 0 }} id="alert-dialog-description-400">
+            <Typography variant="subtitle1">
+              Something was wrong with the request and the server wasn't able to fullfil it.
+            </Typography>
+          </DialogContent>
+        )}
         <DialogActions>
           <Button onClick={() => dispatch({ type: 'error/resetErrors' })}>
-            {t('close')}
+            Close
           </Button>
         </DialogActions>
       </Card>
     </Dialog>
   );
 }
-
-DialogError.propTypes = {};
-
-DialogError.defaultProps = {};
 
 export default DialogError;

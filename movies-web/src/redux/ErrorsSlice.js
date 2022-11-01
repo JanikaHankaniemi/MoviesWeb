@@ -12,11 +12,11 @@ export const errorsSlice = createSlice({
     resetErrors: () => initialState,
     serverError: (state) => {
       state.errorCode = 500;
-      state.errorMessage = 'SERVER_ERROR';
+      state.errorMessage = 'Server error';
     },
     badRequestError: (state) => {
       state.errorCode = 400;
-      state.errorMessage = 'THERE_ARE_VALIDATION_ERRORS';
+      state.errorMessage = 'Bad Request';
     },
   },
   extraReducers: {
