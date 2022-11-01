@@ -15,10 +15,10 @@ import { LocalMovies } from "@mui/icons-material";
 import MobileDrawer from "./MobileDrawer";
 const nameOfApp = "MoviesDB"
 const logoAndName = (
-  <LinkMaterial href="/">
-    <Typography variant="subtitle1" color="white">
-      <LocalMovies />{nameOfApp}
-    </Typography>
+  <LinkMaterial href="/" style={{ textDecoration: 'none' }}>
+      <Typography variant="subtitle1" color="white">
+      <LocalMovies color="white"/>{nameOfApp}
+      </Typography>
   </LinkMaterial>
 );
 
@@ -51,7 +51,7 @@ const NavigationBar = ({ links }) => {
                         : links[0].path
                     }>
                     {links.map((object, index) => (
-                      <Tab key={index} value={object.path} label={object.title} component={Link} to={object.path}/>
+                      <Tab key={index} value={object.path} label={object.title} component={Link} to={object.path} />
                     ))}
                   </Tabs>
                 </Grid>

@@ -8,6 +8,7 @@ import {
   Card,
   Button
 } from '@mui/material';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 function DialogError() {
   const dispatch = useDispatch();
@@ -23,8 +24,17 @@ function DialogError() {
       <Card title={`${errorCode}: ${errorMessage}`} sx={{ padding: '20px' }}
       >
         {errorCode === 500 && (
-        <DialogContent sx={{ padding: 0 }} id="alert-dialog-description-500">
-          <Typography variant="h5">{`${errorCode}: ${errorMessage}`}</Typography>
+          <DialogContent sx={{ padding: 0 }} id="alert-dialog-description-500">
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+            }}>
+              <ErrorOutlineIcon sx={{ fontSize: 24, marginRight:'15px' }} />
+              <Typography variant="h5">
+                {`${errorCode}: ${errorMessage}`}
+              </Typography>
+            </div>
           <Typography variant="subtitle1">
            Something went wrong with the request and the server wasn't able to fullfil it.
           </Typography>
