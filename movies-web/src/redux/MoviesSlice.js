@@ -50,6 +50,9 @@ export const moviesSlice = createSlice({
     addingMovie: false
   },
   reducers: {
+    clearAddedMovie: (state) => {
+      state.addedMovie = "";
+    },
     setSearchFilter: (state, { payload }) => {
       state.searchFilter.freeText = payload.freeText;
       state.searchFilter.year = payload.year;
@@ -122,5 +125,11 @@ export const moviesSlice = createSlice({
     },
   },
 });
+
+export const {
+  clearSearchFilter,
+  setSearchFilter,
+  clearAddedMovie
+} = moviesSlice.actions;
 
 export default moviesSlice.reducer;

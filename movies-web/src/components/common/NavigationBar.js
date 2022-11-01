@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useLocation, Link } from 'react-router-dom';
 import {
   AppBar,
@@ -21,24 +21,9 @@ const logoAndName = (
     </Typography>
   </LinkMaterial>
 );
-const LinkTab = (props) => {
-  return (
-    <Tab
-      component="a"
-      onClick={(event) => {
-        event.preventDefault();
-      }}
-      {...props}
-    />
-  );
-}
 
 const NavigationBar = ({ links }) => {
   const location = useLocation().pathname;
-  const [value, setValue] = useState(0);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
   const isMobile = useMediaQuery('(max-width:770px)');
   return (
     <Box role="navigation">

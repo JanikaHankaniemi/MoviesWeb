@@ -35,7 +35,7 @@ function FindMoviesContainer() {
   return (
     <Grid container>
       <Grid item xs={12} sx={{ marginTop: '30px', marginBottom: '30px' }}>
-        <Typography variant="h4" sx={{ marginLeft: '20px' }}>Hullo, Find A Movie</Typography>
+        <Typography variant="h4" sx={{ marginLeft: '20px' }}>Hullo, Find a Movie</Typography>
       </Grid>
       <Grid item xs={12} sx={{ marginBottom: '10px' }}>
         <SearchAccordion />
@@ -75,14 +75,10 @@ function FindMoviesContainer() {
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
-                  <Typography variant="body2">{"Director: "}
-                    {`${movie.director?.firstName} ${movie.director?.lastName}`}
-                  </Typography>
+                  <Typography variant="body2">{`Director: ${movie.director}`}</Typography>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
-                  <Typography variant="body2">{"Actors: "}
-                    {movie.actors?.map(actor => actor.firstName + " " + actor.lastName).join(', ')}
-                  </Typography>
+                  <Typography variant="body2">{`Actors: ${movie.actors}`}</Typography>
                 </Grid>
               </Grid>
             </Card>
